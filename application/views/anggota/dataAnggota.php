@@ -66,7 +66,7 @@
 
       <div class="container-fluid">
         <div class="card-body">
-            <a href="<?php echo base_url("anggota/tambah") ?>"><button class="btn btn-success">Tambah</button></a>
+            <a href="<?php echo base_url("/anggota/tambah") ?>"><button class="btn btn-success">Tambah</button></a>
         </div>
 
         <!-- DataTables Example -->
