@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Tambah Buku</title>
+  <title>Data Peminjaman</title>
 
   <!-- Custom fonts for this template-->
   <link href="<?php echo base_url('assets/fontawesome-free/css/all.min.css') ?>" rel="stylesheet" type="text/css">
@@ -50,12 +50,12 @@
           <span>Anggota</span>
         </a>
       </li>
-      <li class="nav-item  active">
+      <li class="nav-item">
         <a class="nav-link" href="<?php echo base_url("buku") ?>">
           <i class="fas fa-fw fa-chart-area"></i>
           <span>Buku</span></a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item active">
         <a class="nav-link" href="<?php echo base_url("peminjaman") ?>">
           <i class="fas fa-fw fa-table"></i>
           <span>Peminjaman</span></a>
@@ -63,41 +63,80 @@
     </ul>
 
     <div id="content-wrapper">
-
       <div class="container-fluid">
+        <div class="card">
+          <div class="card-body">
+            <?php echo form_open("Peminjaman_controller/simpanPeminjaman"); ?>
+             <form class="form-inline" action="/action_page.php">
+                <div class="form-group">
+                  <label>Buku</label>
+                  <select name="buku" class="form-control">
+                    <?php 
+                      foreach ($buku as $data) {
+                        echo "<option value='$data->KdRegister'>".$data->Judul."</option>";
+                      }
+                     ?>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Anggota</label>
+                  <select name="anggota" class="form-control">
+                    <?php 
+                      foreach ($anggota as $data){
+                        echo "<option value='$data->KdAnggota'>".$data->Nama."</option>";
+                      }
+                     ?>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Tanggal Pinjam</label>
+                  <input type="text" name="tgl" class="form-control" value="<?php echo date('Y-m-d'); ?>" readonly>
+                </div>
+                <div class="form-group">
+                  <input type="submit" name="submit" value="Tambah" class="btn btn-success">
+                </div>
+              </form>
+          </div>
+        </div>
         <!-- DataTables Example -->
         <div class="card mb-3">
           <div class="card-header">
             <i class="fas fa-table"></i>
-              Tambah Buku
+              Data Buku
           </div>
           <div class="card-body">
-            <div class="container">
-              <?php echo form_open("Peminjaman_controller/tambahBuku"); ?>
-              <form class="form-horizontal" action="" method="POST">
-                <div class="form-group">
-                  <input type="text" class="form-control" id="judul" placeholder="Judul" name="judul">
-                </div>
-                <div class="form-group">
-                  <input type="text" class="form-control" id="pengarang" placeholder="Pengarang" name="pengarang">
-                </div>
-                <div class="form-group">
-                  <input type="text" class="form-control" id="penerbit" placeholder="Penerbit" name="penerbit">
-                </div>
-                <div class="form-group">
-                  <select name="tahun">
-                    <option selected="selected">Tahun</option>
-                    <?php
-                      for($i=date('Y'); $i>=date('Y')-50; $i-=1){
-                        echo"<option value='$i'> $i </option>";
+            <div class="table-responsive">
+              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th>Kode</th>
+                    <th>Judul</th>
+                    <th>Peminjam</th>
+                    <th>Tanggal Pinjam</th>
+                    <th>Tanggal Kembali</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                <?php 
+                  foreach($peminjaman as $data){
+                      echo "<tr>
+                      <td>".$data->KdPinjam."</td>
+                      <td>".$data->Judul."</td>
+                      <td>".$data->Nama."</td>
+                      <td>".$data->Tgl_pinjam."</td>
+                      <td>".$data->Tgl_kembali."</td>";
+                      if ($data->Tgl_kembali == "0000-00-00") {
+                        echo "<td><a href='".base_url("Peminjaman_controller/bukuKembali/").$data->KdPinjam."'>Kembali</a></td>
+                        </tr>";
                       }
-                    ?>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <input type="submit" name="submit" value="SIMPAN" class="btn btn-success">
-                </div>
-              </form>
+                      else{
+                        echo "<td></td>";
+                      }
+                    }
+                 ?>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>

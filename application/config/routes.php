@@ -58,6 +58,7 @@ $route['pegawai'] = 'Peminjaman_controller/pegawai';
 $route['anggota'] = 'Peminjaman_controller/anggota';
 $route['peminjaman'] = 'Peminjaman_controller/peminjaman';
 $route['buku'] = 'Peminjaman_controller/buku';
+$route['peminjaman'] = 'Peminjaman_controller/peminjaman';
 $route['anggota/tambah'] = 'Peminjaman_controller/tambahAnggota';
 $route['pegawai/tambah'] = 'Peminjaman_controller/tambahPegawai';
 $route['buku/tambah'] = 'Peminjaman_controller/tambahBuku';

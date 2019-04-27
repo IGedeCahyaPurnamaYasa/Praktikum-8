@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB Admin - Dashboard</title>
+  <title>Data Buku</title>
 
   <!-- Custom fonts for this template-->
   <link href="<?php echo base_url('assets/fontawesome-free/css/all.min.css') ?>" rel="stylesheet" type="text/css">
@@ -38,7 +38,7 @@
 
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
-      <li class="nav-item active">
+      <li class="nav-item">
         <a class="nav-link" href="<?php echo base_url("pegawai") ?>">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Pegawai</span>
@@ -50,7 +50,7 @@
           <span>Anggota</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item active">
         <a class="nav-link" href="<?php echo base_url("buku") ?>">
           <i class="fas fa-fw fa-chart-area"></i>
           <span>Buku</span></a>

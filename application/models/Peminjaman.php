@@ -14,6 +14,16 @@ class Peminjaman extends CI_Model{
     public function getAnggota(){
         return $this->db->get('anggota')->result();
     }
+    public function getPeminjaman(){
+        $this->db->select('peminjaman.KdPinjam,Nama,Judul,Tgl_pinjam,Tgl_kembali');
+        $this->db->from('peminjaman');
+        $this->db->join('anggota','anggota.KdAnggota = peminjaman.KdAnggota');
+        $this->db->join('buku','buku.KdRegister = peminjaman.KdRegister');
+        $this->db->join('detil_pinjam', 'detil_pinjam.KdPinjam = peminjaman.KdPinjam');
+        $query = $this->db->get('');
+
+        return $query->result();
+    }
 
 
     public function simpanAnggota(){
@@ -24,8 +34,32 @@ class Peminjaman extends CI_Model{
 	      "Jenjang" => $this->input->post('jenjang'),
 	      "Alamat" => $this->input->post('alamat')
 	    );
-	    
 	    $this->db->insert('anggota', $data); // Untuk mengeksekusi perintah insert data
+  	}
+
+  	public function simpanPeminjaman(){
+	    $data = array(
+	      "KdPinjam" => '',
+	      "KdAnggota" => $this->input->post('anggota'),
+	      "KdRegister" => $this->input->post('buku')
+	    );
+	    $this->db->insert('peminjaman', $data); // Untuk mengeksekusi perintah insert data
+
+	    $data2 = array(
+	    	"KdPinjam" => '',
+	    	"KdRegister" => $this->input->post('buku'),
+	    	"Tgl_pinjam" => $this->input->post('tgl'),
+	    	"Tgl_kembali" => ''
+	    );
+
+	    $this->db->insert('detil_pinjam', $data2);
+  	}
+
+  	public function bukuKembali($kode){
+  		$tgl = date('Y-m-d');
+  		$this->db->set('Tgl_kembali',$tgl);
+  		$this->db->where('KdPinjam', $kode);
+  		$this->db->update('detil_pinjam');
   	}
 
   	public function simpanBuku(){
@@ -85,16 +119,6 @@ class Peminjaman extends CI_Model{
 	    $this->db->update('buku', $data); // Untuk mengeksekusi perintah update data
   	}
 
-  	public function edit($nis){
-	    $data = array(
-	      "nama" => $this->input->post('input_nama'),
-	      "alamat" => $this->input->post('input_alamat')
-	    );
-	    
-	    $this->db->where('no_induk', $nis);
-	    $this->db->update('buku', $data); // Untuk mengeksekusi perintah update data
-  	}
-
 	public function deleteAnggota($kode){
 	    $this->db->where('KdAnggota', $kode);
 	    $this->db->delete('anggota'); // Untuk mengeksekusi perintah delete data
@@ -108,9 +132,6 @@ class Peminjaman extends CI_Model{
 	    $this->db->delete('petugas'); // Untuk mengeksekusi perintah delete data
   	}
 
-    public function view(){
-	    return $this->db->get('buku')->result();
-	}
 	public function viewAnggota_by($kode){
 	    $this->db->where('KdAnggota', $kode);
 	    return $this->db->get('anggota')->row();

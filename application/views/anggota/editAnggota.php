@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB Admin - Dashboard</title>
+  <title>Edit Anggota</title>
 
   <!-- Custom fonts for this template-->
   <link href="<?php echo base_url('assets/fontawesome-free/css/all.min.css') ?>" rel="stylesheet" type="text/css">
@@ -38,14 +38,14 @@
 
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
-      <li class="nav-item active">
+      <li class="nav-item">
         <a class="nav-link" href="<?php echo base_url("pegawai") ?>">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Pegawai</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="<?php echo base_url("anggota") ?>">
+        <a class="nav-link active" href="<?php echo base_url("anggota") ?>">
           <i class="fas fa-fw fa-folder"></i>
           <span>Anggota</span>
         </a>

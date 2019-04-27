@@ -25,8 +25,10 @@ class Peminjaman_controller extends CI_Controller
   	}
 
   	public function peminjaman(){
-  		$data['peminjaman'] = $this->peminjaman->get();
-	    $this->load->view('peminjaman', $data);	
+  		$data['peminjaman'] = $this->peminjaman->getPeminjaman();
+  		$data['anggota'] = $this->peminjaman->getAnggota();
+  		$data['buku'] = $this->peminjaman->getBuku();
+	    $this->load->view('peminjaman/peminjaman', $data);
   	}
 
   	public function tambahAnggota(){
@@ -106,6 +108,19 @@ class Peminjaman_controller extends CI_Controller
      public function hapus($nis){
 	    $this->mymodel->delete($nis); // Panggil fungsi delete() yang ada di SiswaModel.php
 	    redirect('');
+  	}
+
+  	public function simpanPeminjaman(){
+  		if($this->input->post('submit')){ // Jika user mengklik tombol submit yang ada di form
+	        $this->peminjaman->simpanPeminjaman(); // Panggil fungsi save() 
+	        redirect('peminjaman');
+	    }
+	    $this->load->view('peminjaman/peminjaman');
+  	}
+
+  	public function bukuKembali($kode){
+  		$this->peminjaman->bukuKembali($kode);
+  		redirect('peminjaman');
   	}
 }
 
