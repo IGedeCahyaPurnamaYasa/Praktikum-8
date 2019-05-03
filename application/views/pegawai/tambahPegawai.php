@@ -71,6 +71,7 @@
             <i class="fas fa-table"></i>
               Tambah Anggota
           </div>
+<!--           <?php echo date('Y-m-d') ?> -->
           <div class="card-body">
             <div class="container">
               <?php echo form_open("Peminjaman_controller/tambahPegawai"); ?>
@@ -81,6 +82,13 @@
                 <div class="form-group">
                   <input type="text" class="form-control" id="alamat" placeholder="Alamat" name="alamat">
                 </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" id="username" placeholder="Username" name="username">
+                </div>
+                <div class="form-group">
+                  <input type="password" class="form-control" id="pass" placeholder="Password" name="password">
+                </div>
+                <input type="hidden" name="login" value="<?php echo date('Y-m-d') ?>">
                 <div class="form-group">
                   <input type="submit" name="submit" value="SIMPAN" class="btn btn-success">
                 </div>

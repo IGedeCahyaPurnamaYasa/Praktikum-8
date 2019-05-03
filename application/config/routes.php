@@ -63,5 +63,7 @@ $route['anggota/tambah'] = 'Peminjaman_controller/tambahAnggota';
 $route['pegawai/tambah'] = 'Peminjaman_controller/tambahPegawai';
 $route['buku/tambah'] = 'Peminjaman_controller/tambahBuku';
 
+$route['pegawai/login'] = 'Peminjaman_controller/login';
+
 $route['welcome/load'] = 'welcome/load';
 $route['home/data'] = 'home/index';

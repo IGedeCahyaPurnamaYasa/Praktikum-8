@@ -7,6 +7,7 @@ class Peminjaman_controller extends CI_Controller
 	public function __construct(){
 	    parent::__construct();
 	    $this->load->model('peminjaman'); // Load SiswaModel ke controller ini
+	    $this->load->library('session');
   	}
 
   	public function pegawai(){
@@ -50,7 +51,7 @@ class Peminjaman_controller extends CI_Controller
 
   	public function tambahBuku(){
 	    if($this->input->post('submit')){ // Jika user mengklik tombol submit yang ada di form
-	        $this->peminjaman->simpanBuku(); // Panggil fungsi save() 
+	        $res = $this->peminjaman->simpanBuku(); // Panggil fungsi save() 
 	        redirect('buku');
 	    }
 	    $this->load->view('buku/tambahBuku');
@@ -121,6 +122,24 @@ class Peminjaman_controller extends CI_Controller
   	public function bukuKembali($kode){
   		$this->peminjaman->bukuKembali($kode);
   		redirect('peminjaman');
+  	}
+
+  	public function login(){
+  		if($this->input->post('submit')){
+  			$cek['petugas'] = $this->peminjaman->prosesLogin();
+  			if($cek > 0){
+  				// $uname = $this->input->post('username');
+  				$this->peminjaman->lastLogin();
+  				// $this->session->set_userdata('uname',$uname);
+  				// $get = $this->peminjaman->getID();
+		  		// $this->session->set_userdata('id',$get);
+  				redirect('pegawai');
+  			}
+  			else{
+  				echo "Username atau Password Salah";
+  			}
+  		}
+  		$this->load->view('pegawai/login');
   	}
 }
 

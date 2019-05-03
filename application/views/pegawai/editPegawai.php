@@ -85,6 +85,12 @@
                   <input type="text" class="form-control" id="alamat" value="<?php echo set_value('alamat', $pegawai->Alamat) ?>" name="alamat">
                 </div>
                 <div class="form-group">
+                  <input type="text" class="form-control" id="username" value="<?php echo set_value('username', $pegawai->username) ?>" name="username">
+                </div>
+                <div class="form-group">
+                  <input type="password" class="form-control" id="password" value="<?php echo set_value('alamat', $pegawai->password) ?>" name="password">
+                </div>
+                <div class="form-group">
                   <input type="submit" name="submit" value="SIMPAN" class="btn btn-success">
                 </div>
               </form>

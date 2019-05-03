@@ -71,6 +71,9 @@
         <!-- DataTables Example -->
         <div class="card mb-3">
           <div class="card-header">
+
+            <?php echo $this->session->userdata('uname'); ?>
+            <?php echo $this->session->userdata('id'); ?>
             <i class="fas fa-table"></i>
               Data Pegawai
           </div>
@@ -92,6 +95,8 @@
                       <td>".$data->KdPetugas."</td>
                       <td>".$data->Nama."</td>
                       <td>".$data->Alamat."</td>
+                      <td>".$data->username."</td>
+                      <td>".$data->last_login."</td>
                       <td><a href='".base_url("Peminjaman_controller/editPegawai/").$data->KdPetugas."'>Ubah</a></td>
                       <td><a href='".base_url("Peminjaman_controller/deletePegawai/").$data->KdPetugas."'>Hapus</a></td>
                       </tr>";

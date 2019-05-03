@@ -38,9 +38,11 @@ class Peminjaman extends CI_Model{
   	}
 
   	public function simpanPeminjaman(){
+  		$id = $this->session->userdata('id');
 	    $data = array(
 	      "KdPinjam" => '',
 	      "KdAnggota" => $this->input->post('anggota'),
+	      "KdPetugas" => $id,
 	      "KdRegister" => $this->input->post('buku')
 	    );
 	    $this->db->insert('peminjaman', $data); // Untuk mengeksekusi perintah insert data
@@ -77,7 +79,10 @@ class Peminjaman extends CI_Model{
 	    $data = array(
 	      "KdPetugas" => '',
 	      "Nama" => $this->input->post('nama'),
-	      "Alamat" => $this->input->post('alamat')
+	      "Alamat" => $this->input->post('alamat'),
+	      "username" => $this->input->post('username'),
+	      "password" => $this->input->post('password'),
+	      "last_login" => $this->input->post('login')
 	    );
 	    
 	    $this->db->insert('petugas', $data); // Untuk mengeksekusi perintah insert data
@@ -99,7 +104,9 @@ class Peminjaman extends CI_Model{
 	    $data = array(
 	      "KdPetugas" => $this->input->post('kode'),
 	      "Nama" => $this->input->post('nama'),
-	      "Alamat" => $this->input->post('alamat')
+	      "Alamat" => $this->input->post('alamat'),
+	      "username" => $this->input->post('username'),
+	      "password" => $this->input->post('password')
 	    );
 	    
 	    $this->db->where('KdPetugas', $kode);
@@ -143,6 +150,31 @@ class Peminjaman extends CI_Model{
   	public function viewPegawai_by($kode){
 	    $this->db->where('KdPetugas', $kode);
 	    return $this->db->get('petugas')->row();
+  	}
+
+  	public function prosesLogin(){
+  		// $uname = $this->input->post('username');
+  		// $pass = $this->input->post('password');
+  		// $this->db->where('username', $uname);
+  		// $this->db->where('password', $pass);
+  		// return $this->db->get('petugas')->num_rows();
+  		$uname = $this->input->post('username');
+  		$pass = $this->input->post('password');
+  		$this->db->select('KdPetugas,username');
+  		$this->db->where('username',$uname);
+  		$this->db->where('password',$pass);
+  		$res = $this->db->get('petugas')->row();
+  		$this->session->set_userdata('uname', $res->username);
+  		$this->session->set_userdata('id',$res->KdPetugas);
+
+  	}
+
+  	public function lastLogin(){
+  		$tgl = date('Y-m-d');
+  		$id = $this->session->userdata('id');
+  		$this->db->set('last_login',$tgl);
+  		$this->db->where('KdPetugas', $id);
+  		$this->db->update('petugas');
   	}
 }
 ?>
