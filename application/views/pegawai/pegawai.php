@@ -19,6 +19,7 @@
 
   <!-- Custom styles for this template-->
   <link href="<?php echo base_url('css/sb-admin.css') ?>" rel="stylesheet">
+  <link href="<?php echo base_url('css/sweetalert.css') ?>" rel="stylesheet" >
 
 </head>
 
@@ -71,15 +72,12 @@
         <!-- DataTables Example -->
         <div class="card mb-3">
           <div class="card-header">
-
-            <?php echo $this->session->userdata('uname'); ?>
-            <?php echo $this->session->userdata('id'); ?>
             <i class="fas fa-table"></i>
               Data Pegawai
           </div>
           <div class="card-body">
             <div class="table-responsive">
-              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" border='1' width='100%' style='border-collapse: collapse;' id='postsList'>
                 <thead>
                   <tr>
                     <th>Kode</th>
@@ -91,19 +89,20 @@
                 <tbody>
                 <?php 
                   foreach($pegawai as $data){
-                      echo "<tr>
+                      echo "<tr id='delete'>
                       <td>".$data->KdPetugas."</td>
                       <td>".$data->Nama."</td>
                       <td>".$data->Alamat."</td>
                       <td>".$data->username."</td>
                       <td>".$data->last_login."</td>
                       <td><a href='".base_url("Peminjaman_controller/editPegawai/").$data->KdPetugas."'>Ubah</a></td>
-                      <td><a href='".base_url("Peminjaman_controller/deletePegawai/").$data->KdPetugas."'>Hapus</a></td>
+                      <td><button onclick='del(".$data->KdPetugas.")'>Delete</button></td>
                       </tr>";
                     }
                  ?>
                 </tbody>
               </table>
+              <div style='margin-top: 10px;' id='pagination'></div>
             </div>
           </div>
         </div>
@@ -168,6 +167,87 @@
   <script src="<?php echo base_url('js/demo/datatables-demo.js') ?>"></script>
   <script src="<?php echo base_url('js/demo/chart-area-demo.js') ?>"></script>
 
+  <script src="<?php echo base_url('js/sweetalert.min.js') ?>"></script>
+  <script src="<?php echo base_url('js/sweetalert-dev.js') ?>"></script>
+
+  <script type="text/javascript">
+    function del(id){
+      swal({
+        title: "Anda Yakin ?",
+        text: "Data ini akan hilang dan tak bisa kembali",
+        type: "warning",
+        showCacelButton: true,
+        confirmButtonText: "Delete",
+        closeOnConfirm: false
+      },
+      function(){
+        $.ajax({
+          url: "<?php echo base_url('Peminjaman_controller/deletePegawai/') ?>",
+          type: "post",
+          data: {id:id},
+          success:function(){
+            swal('Data Berhasil Dihapus','success');
+            $("#delete").fadeTo("slow",0.7,function(){
+              $(this).remove();
+            })
+          },
+          error:function(){
+            swal('Data Gagal Dihapus', 'error');
+          }
+        });
+      });
+    }
+  </script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script type='text/javascript'>
+     $(document).ready(function(){
+
+       // Detect pagination click
+       $('#pagination').on('click','a',function(e){
+         e.preventDefault(); 
+         var pageno = $(this).attr('data-ci-pagination-page');
+         loadPagination(pageno);
+       });
+
+       loadPagination(0);
+
+       // Load pagination
+       function loadPagination(pagno){
+         $.ajax({
+           url: '<?=base_url()?>Peminjaman_controller/loadRecord/'+pagno,
+           type: 'get',
+           dataType: 'json',
+           success: function(response){
+              $('#pagination').html(response.pagination);
+              createTable(response.result,response.row);
+           }
+         });
+       }
+
+       // Create table list
+       function createTable(result,sno){
+         sno = Number(sno);
+         $('#postsList tbody').empty();
+         for(index in result){
+            var id = result[index].id;
+            var title = result[index].title;
+            var content = result[index].content;
+            content = content.substr(0, 60) + " ...";
+            var link = result[index].link;
+            sno+=1;
+
+            var tr = "<tr>";
+            tr += "<td>"+ sno +"</td>";
+            tr += "<td><a href='"+ link +"' target='_blank' >"+ title +"</a></td>";
+            tr += "<td>"+ content +"</td>";
+            tr += "</tr>";
+            $('#postsList tbody').append(tr);
+   
+          }
+        }
+      });
+    </script>
 </body>
 
 </html>

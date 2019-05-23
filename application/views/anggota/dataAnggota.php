@@ -19,6 +19,7 @@
 
   <!-- Custom styles for this template-->
   <link href="<?php echo base_url('css/sb-admin.css') ?>" rel="stylesheet">
+  <link href="<?php echo base_url('css/sweetalert.css') ?>" rel="stylesheet" >
 
 </head>
 
@@ -77,33 +78,108 @@
           </div>
           <div class="card-body">
             <div class="table-responsive">
-              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead>
-                  <tr>
-                    <th>Kode</th>
-                    <th>Nama</th>
-                    <th>Prodi</th>
-                    <th>Jenjang</th>
-                    <th>Alamat</th>
-                    <th colspan="2">Aksi</th>
-                  </tr>
-                </thead>
-                <tbody>
-                <?php 
-                  foreach($anggota as $data){
-                      echo "<tr>
-                      <td>".$data->KdAnggota."</td>
-                      <td>".$data->Nama."</td>
-                      <td>".$data->Prodi."</td>
-                      <td>".$data->Jenjang."</td>
-                      <td>".$data->Alamat."</td>
-                      <td><a href='".base_url("Peminjaman_controller/editAnggota/").$data->KdAnggota."'>Edit</a></td>
-                      <td><a href='".base_url("Peminjaman_controller/deleteAnggota/").$data->KdAnggota."'>Delete</a></td>
-                      </tr>";
-                    }
-                 ?>
-                </tbody>
-              </table>
+              <div class="dataTables_wrapper dt-bootstrap4 no-footer" id="dataTable_wrapper" width="100%" cellspacing="0">
+                <div class="row">
+                  <div class="col-sm-12 col-md-6">
+                    <div class="dataTables_length" id="dataTable_length">
+                      <label>Show</label>
+                      <select name="dataTable_length" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-6">
+                    <div class="dataTables_filter" id="dataTable_filter">
+                      <label>Search : </label>
+                      <input type="search" name="" class="form-control form-control-sm" placeholder aria-controls="dataTable">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <table class="table table-bordered dataTable no-footer" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;">
+                      <thead>
+                        <tr role="row">
+                          <th class="sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Kode: activate to sort column descending" style="width: 70px;">
+                            Kode
+                          </th>
+                          <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Nama: activate to sort column ascending" style="width: 125px;">Nama</th>
+                          <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Prodi: activate to sort column ascending" style="width: 121px;">Prodi</th>
+                          <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Jenjang: activate to sort column ascending" style="width: 195px;">Jenjang</th>
+                          <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Alamat: activate to sort column ascending" style="width: 195px;">Alamat</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <?php 
+                          foreach($anggota as $data){
+                              echo "<tr id='delete' role='row' class='odd'>
+                              <td class='sorting_1'>".$data->KdAnggota."</td>
+                              <td>".$data->Nama."</td>
+                              <td>".$data->Prodi."</td>
+                              <td>".$data->Jenjang."</td>
+                              <td>".$data->Alamat."</td>
+                              <td><a href='".base_url("Peminjaman_controller/editAnggota/").$data->KdAnggota."'>Edit</a></td>
+                              <td><button onclick = del(".$data->KdAnggota.") class='btn btn-danger'>Delete</button></td>
+                              </tr>";
+                            }
+                         ?>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12 col-md-5">
+                    <div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite">Showing 1 to 10 of 10 entries
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-7">
+                    <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
+                      <ul class="pagination">
+                        <li class="paginate_button page-item previous disabled" id="dataTable_previous">
+                          <a href="#" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
+                        </li>
+                        <li class="paginate_button page-item active">
+                          <a href="#" aria-controls="dataTable" data-dt-idx="1" tabindex="0" class="page-link">1</a>
+                        </li>
+                        <li class="paginate_button page-item next disabled" id="dataTable_next">
+                          <a href="#" aria-controls="dataTable" data-dt-idx="2" tabindex="0" class="page-link">Next</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                </div>
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>Kode</th>
+                      <th>Nama</th>
+                      <th>Prodi</th>
+                      <th>Jenjang</th>
+                      <th>Alamat</th>
+                      <th colspan="2">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  <?php 
+                    foreach($anggota as $data){
+                        echo "<tr id='delete'>
+                        <td>".$data->KdAnggota."</td>
+                        <td>".$data->Nama."</td>
+                        <td>".$data->Prodi."</td>
+                        <td>".$data->Jenjang."</td>
+                        <td>".$data->Alamat."</td>
+                        <td><a href='".base_url("Peminjaman_controller/editAnggota/").$data->KdAnggota."'>Edit</a></td>
+                        <td><button onclick = del(".$data->KdAnggota.") class='btn btn-danger'>Delete</button></td>
+                        </tr>";
+                      }
+                   ?>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -130,24 +206,7 @@
     <i class="fas fa-angle-up"></i>
   </a>
 
-  <!-- Logout Modal-->
-  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="login.html">Logout</a>
-        </div>
-      </div>
-    </div>
-  </div>
+ 
 
   <!-- Bootstrap core JavaScript-->
   <script src="<?php echo base_url('assets/jquery/jquery.min.js') ?>"></script>
@@ -167,6 +226,38 @@
   <!-- Demo scripts for this page-->
   <script src="<?php echo base_url('js/demo/datatables-demo.js') ?>"></script>
   <script src="<?php echo base_url('js/demo/chart-area-demo.js') ?>"></script>
+
+  <script src="<?php echo base_url('js/sweetalert.min.js') ?>"></script>
+  <script src="<?php echo base_url('js/sweetalert-dev.js') ?>"></script>
+
+   <script type="text/javascript">
+    function del(id){
+      swal({
+        title: "Anda Yakin ?",
+        text: "Data ini akan hilang dan tak bisa kembali",
+        type: "warning",
+        showCacelButton: true,
+        confirmButtonText: "Delete",
+        closeOnConfirm: false
+      },
+      function(){
+        $.ajax({
+          url: "<?php echo base_url('Peminjaman_controller/deleteAnggota/') ?>",
+          type: "post",
+          data: {id:id},
+          success:function(){
+            swal('Data Berhasil Dihapus','success');
+            $("#delete").fadeTo("slow",0.7,function(){
+              $(this).remove();
+            })
+          },
+          error:function(){
+            swal('Data Gagal Dihapus', 'error');
+          }
+        });
+      });
+    }
+  </script>
 
 </body>
 

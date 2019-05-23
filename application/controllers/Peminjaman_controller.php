@@ -8,6 +8,8 @@ class Peminjaman_controller extends CI_Controller
 	    parent::__construct();
 	    $this->load->model('peminjaman'); // Load SiswaModel ke controller ini
 	    $this->load->library('session');
+      // Load Pagination library
+      $this->load->library('pagination');
   	}
 
   	public function pegawai(){
@@ -85,14 +87,17 @@ class Peminjaman_controller extends CI_Controller
     }
 
     public function deleteAnggota($kode){
-    	$this->peminjaman->deleteAnggota($kode); // Panggil fungsi delete() 
+    	$kode = $this->input->post('id');
+      $this->peminjaman->deleteAnggota($kode); // Panggil fungsi delete() 
 	    redirect('anggota');
     }
     public function deleteBuku($kode){
+      $kode = $this->input->post('id');
     	$this->peminjaman->deleteBuku($kode); // Panggil fungsi delete() 
 	    redirect('buku');
     }
     public function deletePegawai($kode){
+      $kode = $this->input->post('id');
     	$this->peminjaman->deletePegawai($kode); // Panggil fungsi delete() 
 	    redirect('pegawai');
     }
@@ -120,6 +125,7 @@ class Peminjaman_controller extends CI_Controller
   	}
 
   	public function bukuKembali($kode){
+      $kode = $this->input->post('id');
   		$this->peminjaman->bukuKembali($kode);
   		redirect('peminjaman');
   	}
@@ -141,6 +147,38 @@ class Peminjaman_controller extends CI_Controller
   		}
   		$this->load->view('pegawai/login');
   	}
+
+    public function loadRecord($rowno=0){
+
+      // Row per page
+      $rowperpage = 5;
+
+      // Row position
+      if($rowno != 0){
+        $rowno = ($rowno-1) * $rowperpage;
+      }
+   
+      // All records count
+      $allcount = $this->Main_model->getrecordCount();
+
+      // Get records
+      $users_record = $this->Main_model->getData($rowno,$rowperpage);
+   
+      // Pagination Configuration
+      $config['base_url'] = base_url().'index.php/User/loadRecord';
+      $config['use_page_numbers'] = TRUE;
+      $config['total_rows'] = $allcount;
+      $config['per_page'] = $rowperpage;
+
+      // Initialize
+      $this->pagination->initialize($config);
+
+      // Initialize $data Array
+      $data['pagination'] = $this->pagination->create_links();
+      $data['result'] = $users_record;
+      $data['row'] = $rowno;
+      echo json_encode($data);
+  }
 }
 
  ?>

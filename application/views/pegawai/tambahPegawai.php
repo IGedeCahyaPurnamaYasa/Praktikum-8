@@ -19,6 +19,7 @@
 
   <!-- Custom styles for this template-->
   <link href="<?php echo base_url('css/sb-admin.css') ?>" rel="stylesheet">
+  <link href="<?php echo base_url('css/sweetalert.css') ?>" rel="stylesheet" >
 
 </head>
 
@@ -74,8 +75,8 @@
 <!--           <?php echo date('Y-m-d') ?> -->
           <div class="card-body">
             <div class="container">
-              <?php echo form_open("Peminjaman_controller/tambahPegawai"); ?>
-              <form class="form-horizontal" action="" method="POST">
+              <?php //echo form_open("Peminjaman_controller/tambahPegawai"); ?>
+              <form class="form-horizontal" action="" method="POST" id="form-pegawai">
                 <div class="form-group">
                   <input type="text" class="form-control" id="Nama" placeholder="Nama" name="nama">
                 </div>
@@ -90,7 +91,7 @@
                 </div>
                 <input type="hidden" name="login" value="<?php echo date('Y-m-d') ?>">
                 <div class="form-group">
-                  <input type="submit" name="submit" value="SIMPAN" class="btn btn-success">
+                  <input type="submit" name="submit" value="SIMPAN" class="btn btn-success" id="submit">
                 </div>
               </form>
             </div>
@@ -156,6 +157,30 @@
   <!-- Demo scripts for this page-->
   <script src="<?php echo base_url('js/demo/datatables-demo.js') ?>"></script>
   <script src="<?php echo base_url('js/demo/chart-area-demo.js') ?>"></script>
+
+  <script src="<?php echo base_url('js/sweetalert.min.js') ?>"></script>
+  <script src="<?php echo base_url('js/sweetalert-dev.js') ?>"></script>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $(".submit").click(function(){
+        var data = $('#form-pegawai').serialize();
+        $.ajax({
+          url: "<?php echo form_open("Peminjaman_controller/tambahPegawai"); ?>"
+          type: "post",
+          data: data,
+          success:function(){
+            swal('Data Berhasil Ditambahkan','success');
+          },
+          error:function(){
+            swal('Data Gagal Dihapus', 'error');
+          }
+
+        });
+      });
+      
+    });
+  </script>
 
 </body>
 

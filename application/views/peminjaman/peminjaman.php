@@ -19,6 +19,7 @@
 
   <!-- Custom styles for this template-->
   <link href="<?php echo base_url('css/sb-admin.css') ?>" rel="stylesheet">
+  <link href="<?php echo base_url('css/sweetalert.css') ?>" rel="stylesheet" >
 
 </head>
 
@@ -106,7 +107,7 @@
           </div>
           <div class="card-body">
             <div class="table-responsive">
-              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" id="tab">
                 <thead>
                   <tr>
                     <th>Kode</th>
@@ -127,7 +128,7 @@
                       <td>".$data->Tgl_pinjam."</td>
                       <td>".$data->Tgl_kembali."</td>";
                       if ($data->Tgl_kembali == "0000-00-00") {
-                        echo "<td><a href='".base_url("Peminjaman_controller/bukuKembali/").$data->KdPinjam."'>Kembali</a></td>
+                        echo "<td><button onclick=kem(".$data->KdPinjam.") class = 'btn btn-info'>Kembali</a></td>
                         </tr>";
                       }
                       else{
@@ -200,6 +201,38 @@
   <!-- Demo scripts for this page-->
   <script src="<?php echo base_url('js/demo/datatables-demo.js') ?>"></script>
   <script src="<?php echo base_url('js/demo/chart-area-demo.js') ?>"></script>
+  
+  <script src="<?php echo base_url('js/sweetalert.min.js') ?>"></script>
+  <script src="<?php echo base_url('js/sweetalert-dev.js') ?>"></script>
+
+  <script type="text/javascript">
+    function kem(id){
+      swal({
+        title: "Anda Yakin ?",
+        text: "Apakah anda akan mengembalikan buku ini",
+        type: "warning",
+        showCacelButton: true,
+        confirmButtonText: "OK",
+        closeOnConfirm: false
+      },
+      function(){
+        $.ajax({
+          url: "<?php echo base_url('Peminjaman_controller/bukuKembali/') ?>",
+          type: "post",
+          data: {id:id},
+          success:function(){
+            swal('Buku Sudah Dikembalikan','success');
+            setTimeout(function(){
+               $( "#tab" ).load( "<?php echo base_url('peminjaman'); ?> #mytable" );
+            }, 2000);
+          },
+          error:function(){
+            swal('Data Gagal Dihapus', 'error');
+          }
+        });
+      });
+    }
+  </script>
 
 </body>
 

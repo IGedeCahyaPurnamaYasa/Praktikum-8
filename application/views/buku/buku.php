@@ -19,6 +19,7 @@
 
   <!-- Custom styles for this template-->
   <link href="<?php echo base_url('css/sb-admin.css') ?>" rel="stylesheet">
+  <link href="<?php echo base_url('css/sweetalert.css') ?>" rel="stylesheet" >
 
 </head>
 
@@ -92,14 +93,14 @@
                 <tbody>
                 <?php 
                   foreach($buku as $data){
-                      echo "<tr>
+                      echo "<tr id='delete'>
                       <td>".$data->KdRegister."</td>
                       <td>".$data->Judul."</td>
                       <td>".$data->Pengarang."</td>
                       <td>".$data->Penerbit."</td>
                       <td>".$data->Thn_terbit."</td>
-                      <td><a href='".base_url("Peminjaman_controller/editBuku/").$data->KdRegister."'>Ubah</a></td>
-                      <td><a href='".base_url("Peminjaman_controller/deleteBuku/").$data->KdRegister."'>Hapus</a></td>
+                      <td><a href='".base_url("Peminjaman_controller/editBuku/").$data->KdRegister."'>Edit</a></td>
+                      <td><button onclick=del(".$data->KdRegister.") class ='btn btn-danger'>Delete</button></td>
                       </tr>";
                     }
                  ?>
@@ -169,6 +170,37 @@
   <script src="<?php echo base_url('js/demo/datatables-demo.js') ?>"></script>
   <script src="<?php echo base_url('js/demo/chart-area-demo.js') ?>"></script>
 
+  <script src="<?php echo base_url('js/sweetalert.min.js') ?>"></script>
+  <script src="<?php echo base_url('js/sweetalert-dev.js') ?>"></script>
+
+  <script type="text/javascript">
+    function del(id){
+      swal({
+        title: "Anda Yakin ?",
+        text: "Data ini akan hilang dan tak bisa kembali",
+        type: "warning",
+        showCacelButton: true,
+        confirmButtonText: "Delete",
+        closeOnConfirm: false
+      },
+      function(){
+        $.ajax({
+          url: "<?php echo base_url('Peminjaman_controller/deleteBuku/') ?>",
+          type: "post",
+          data: {id:id},
+          success:function(){
+            swal('Data Berhasil Dihapus','success');
+            $("#delete").fadeTo("slow",0.7,function(){
+              $(this).remove();
+            })
+          },
+          error:function(){
+            swal('Data Gagal Dihapus', 'error');
+          }
+        });
+      });
+    }
+  </script>
 </body>
 
 </html>
